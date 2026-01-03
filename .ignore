@@ -1,0 +1,30 @@
+# Unreal Engine project (.uproject) gitignore
+# Intentionally ignores all game Content for the first commit.
+
+# --- IDE / editor ---
+/.vs/
+/.vscode/
+*.code-workspace
+*.sln
+*.VC.db
+*.VC.opendb
+
+# JetBrains
+.idea/
+
+# Rider
+*.sln.iml
+
+# --- Unreal generated folders ---
+/Binaries/
+/DerivedDataCache/
+/Intermediate/
+/Saved/
+
+# --- Project-specific: ignore all content for now ---
+/Content/
+
+# --- Plugins ---
+# Track Plugins source, but ignore build artifacts
+Plugins/**/Binaries/
+Plugins/**/Intermediate/

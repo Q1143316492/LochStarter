@@ -1,0 +1,603 @@
+{
+	"folders": [
+		{
+			"name": "LochStarter",
+			"path": "."
+		},
+		{
+			"name": "UE5",
+			"path": "F:\\UE_57Src\\UE571"
+		}
+	],
+	"settings": {
+		"typescript.tsc.autoDetect": "off",
+		"npm.autoDetect": "off",
+		"terminal.integrated.env.windows": {
+			"PATH": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\ThirdParty\\DotNet\\8.0.412\\win-x64;${env:PATH}",
+			"DOTNET_ROOT": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\ThirdParty\\DotNet\\8.0.412\\win-x64",
+			"DOTNET_HOST_PATH": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\ThirdParty\\DotNet\\8.0.412\\win-x64\\dotnet.exe",
+			"DOTNET_MULTILEVEL_LOOKUP": "0",
+			"DOTNET_ROLL_FORWARD": "LatestMajor"
+		}
+	},
+	"extensions": {
+		"recommendations": [
+			"ms-vscode.cpptools",
+			"ms-dotnettools.csharp"
+		]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "LochStarter Win64 Debug Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Debug",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Debug Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Debug",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarter Win64 Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Debug Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Debug",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 DebugGame Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"DebugGame",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"DebugGame",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarter Win64 DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 DebugGame Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"DebugGame",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Development Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Development",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Development Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Development",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarter Win64 Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Development Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Development",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Test Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Test",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Test Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Test",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarter Win64 Test Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Test Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Test",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Shipping Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Shipping",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Shipping Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Shipping",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarter Win64 Shipping Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarter Win64 Shipping Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarter",
+					"Win64",
+					"Shipping",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 Debug Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"Debug",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 Debug Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"Debug",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarterEditor Win64 Debug Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 Debug Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"Debug",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 DebugGame Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"DebugGame",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 DebugGame Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"DebugGame",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarterEditor Win64 DebugGame Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 DebugGame Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"DebugGame",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 Development Build",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"Development",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 Development Rebuild",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Build.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"Development",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"dependsOn": [
+					"LochStarterEditor Win64 Development Clean"
+				],
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			},
+			{
+				"label": "LochStarterEditor Win64 Development Clean",
+				"group": "build",
+				"command": "Engine\\Build\\BatchFiles\\Clean.bat",
+				"args": [
+					"LochStarterEditor",
+					"Win64",
+					"Development",
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-waitmutex"
+				],
+				"problemMatcher": "$msCompile",
+				"type": "shell",
+				"options": {
+					"cwd": "F:\\UE_57Src\\UE571"
+				}
+			}
+		]
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Launch LochStarter (Debug)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarter-Win64-Debug.exe",
+				"preLaunchTask": "LochStarter Win64 Debug Build",
+				"args": [
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Launch LochStarter (DebugGame)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarter-Win64-DebugGame.exe",
+				"preLaunchTask": "LochStarter Win64 DebugGame Build",
+				"args": [
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Launch LochStarter (Development)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarter.exe",
+				"preLaunchTask": "LochStarter Win64 Development Build",
+				"args": [
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Launch LochStarter (Test)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarter-Win64-Test.exe",
+				"preLaunchTask": "LochStarter Win64 Test Build",
+				"args": [
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Launch LochStarter (Shipping)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarter-Win64-Shipping.exe",
+				"preLaunchTask": "LochStarter Win64 Shipping Build",
+				"args": [
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Launch LochStarterEditor (Debug)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-Debug.exe",
+				"preLaunchTask": "LochStarterEditor Win64 Debug Build",
+				"args": [
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject"
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Launch LochStarterEditor (DebugGame)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-DebugGame.exe",
+				"preLaunchTask": "LochStarterEditor Win64 DebugGame Build",
+				"args": [
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject"
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Launch LochStarterEditor (Development)",
+				"request": "launch",
+				"program": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+				"preLaunchTask": "LochStarterEditor Win64 Development Build",
+				"args": [
+					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject"
+				],
+				"cwd": "F:\\UE_57Src\\UE571",
+				"stopAtEntry": false,
+				"console": "integratedTerminal",
+				"type": "cppvsdbg",
+				"visualizerFile": "F:\\UE_57Src\\UE571\\Engine\\Extras\\VisualStudioDebugging\\Unreal.natvis"
+			},
+			{
+				"name": "Generate Project Files",
+				"type": "coreclr",
+				"request": "launch",
+				"preLaunchTask": "UnrealBuildTool Win64 Development Build",
+				"program": "F:\\UE_57Src\\UE571\\Engine\\Build\\BatchFiles\\RunUBT.bat",
+				"args": [
+					"-projectfiles",
+					"-vscode",
+					"-project=F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject",
+					"-game",
+					"-engine",
+					"-dotnet"
+				],
+				"env": {
+					"PATH": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\ThirdParty\\DotNet\\8.0.412\\win-x64;${env:PATH}",
+					"DOTNET_ROOT": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\ThirdParty\\DotNet\\8.0.412\\win-x64",
+					"DOTNET_HOST_PATH": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\ThirdParty\\DotNet\\8.0.412\\win-x64\\dotnet.exe",
+					"DOTNET_MULTILEVEL_LOOKUP": "0",
+					"DOTNET_ROLL_FORWARD": "LatestMajor"
+				},
+				"console": "integratedTerminal",
+				"stopAtEntry": false,
+				"cwd": "F:\\UE_57Src\\UE571"
+			}
+		]
+	}
+}
