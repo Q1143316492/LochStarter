@@ -1074,7 +1074,7 @@
 			{
 				"name": "Launch LochStarterEditor (Debug)",
 				"request": "launch",
-				"program": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-Debug.exe",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarterEditor-Win64-Debug.exe",
 				"preLaunchTask": "LochStarterEditor Win64 Debug Build",
 				"args": [
 					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject"
@@ -1088,7 +1088,7 @@
 			{
 				"name": "Launch LochStarterEditor (DebugGame)",
 				"request": "launch",
-				"program": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\Win64\\UnrealEditor-Win64-DebugGame.exe",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarterEditor-Win64-DebugGame.exe",
 				"preLaunchTask": "LochStarterEditor Win64 DebugGame Build",
 				"args": [
 					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject"
@@ -1102,7 +1102,7 @@
 			{
 				"name": "Launch LochStarterEditor (Development)",
 				"request": "launch",
-				"program": "F:\\UE_57Src\\UE571\\Engine\\Binaries\\Win64\\UnrealEditor.exe",
+				"program": "F:\\UE_57Src\\WS\\LochStarter\\Binaries\\Win64\\LochStarterEditor.exe",
 				"preLaunchTask": "LochStarterEditor Win64 Development Build",
 				"args": [
 					"F:\\UE_57Src\\WS\\LochStarter\\LochStarter.uproject"

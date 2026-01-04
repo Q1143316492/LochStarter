@@ -4,4 +4,4 @@
 
 #include "Logging/LogMacros.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogochStarterEditor, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogLochStarterEditor, Log, All);

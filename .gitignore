@@ -20,6 +20,8 @@
 /DerivedDataCache/
 /Intermediate/
 /Saved/
+/Build/
+/Windows/
 
 # --- Project-specific: ignore all content for now ---
 /Content/

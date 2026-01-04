@@ -3,8 +3,13 @@
 #include "LochStarterEditor.h"
 #include "Modules/ModuleManager.h"
 
+#define LOCTEXT_NAMESPACE "LochStarterEditor"
+
+DEFINE_LOG_CATEGORY(LogLochStarterEditor);
+
+
 /**
- * LochStarterEditorModule
+ * FLochStarterEditorModule
  */
 class FLochStarterEditorModule : public FDefaultGameModuleImpl
 {
@@ -19,3 +24,5 @@ class FLochStarterEditorModule : public FDefaultGameModuleImpl
 
 
 IMPLEMENT_MODULE(FLochStarterEditorModule, LochStarterEditor);
+
+#undef LOCTEXT_NAMESPACE

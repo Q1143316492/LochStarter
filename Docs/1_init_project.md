@@ -35,8 +35,8 @@ UE 5.7 源码引擎，创建全空项目，跑通vscode和rider的断点运行�
 
 - 其他工具
 
-    - PocketWorlds
-    - GameSubtitles
+    - PocketWorlds 用于在 UI 中展示 3D 角色或物品的独立小场景（例如角色自定义界面中的 3D 预览）
+    - GameSubtitles 增强的字幕系统
 
 我又加了这几个 GameFeatures，ModularGameplay,EnhancedInput,DataRegistry 其他不熟后面再看吧。
 
@@ -125,3 +125,20 @@ UE 5.7 源码引擎，创建全空项目，跑通vscode和rider的断点运行�
 
 **LochStarterEditor.Build.cs (Editor 模块):**
 - 同样剥离了 RPC 注册表功能，保持 Shipping 版本纯净。
+
+保持编译OK。
+
+## 导入蓝图资源
+
+我决定先把 Content/Character 扣过来。X
+
+全部扣过来，怎么找不到 lyra anim only 那个包了。
+
+虽然很多蓝图炸了，但是动画，模型，曲线都正常过来了。
+
+
+
+
+
+
+
