@@ -210,7 +210,7 @@ UGameFeatureAction 相当于加载了当前game feature的时候执行的回调�
 
 例如 GameFeatureAction_AddComponents 就是一个Action，可以额外的添两个参数一个类和一个组件。在激活时就会给这个类动态加上这个组件。 
 
-这里除了 PawnData 之外, 都是对于 GameFeatureAction 的包装。
+这里除了 PawnData 之外, 都是对于 GameFeatureAction 的包装。位于 LochGameCore/Game
 
 pawn data 现在还什么都没有，后面写到了会加输入配置，例如input action那些。还有摄像机模式 camera mode
 
@@ -227,4 +227,25 @@ public:
 	TSubclassOf<APawn> PawnClass;
 };
 ```
+
+到这里我们只配置了体验，还没有加载体验呢。但是首先要把game mode 几个主要类创建一下
+
+先创建 game mode，然后按这个关系把空类创建出来。
+
+```cpp
+ALochGameMode::ALochGameMode(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer)
+{
+    GameStateClass = ALochGameState::StaticClass();
+    GameSessionClass = ALochGameSession::StaticClass();
+    PlayerControllerClass = ALochPlayerController::StaticClass();
+	ReplaySpectatorPlayerControllerClass = ALochReplayPlayerController::StaticClass();
+	PlayerStateClass = ALochPlayerState::StaticClass();
+	DefaultPawnClass = ALochCharacter::StaticClass();
+	HUDClass = ALochHUD::StaticClass();
+}
+```
+搞一个 ALochGameMode -> B_LochGameMode(蓝图) 然后project settings 设置一下。把相关的类都设置一下，创建一个空类，但是什么都不写。
+
+关联的 move ment component, ability system 也都是空类，先过编译。不指望任何流程生效。然后就不能动了，game mode 生效。
 
