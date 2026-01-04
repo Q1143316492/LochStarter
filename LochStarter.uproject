@@ -120,6 +120,10 @@
 		{
 			"Name": "DTLSHandlerComponent",
 			"Enabled": true
+		},
+		{
+			"Name": "LochGameCore",
+			"Enabled": true
 		}
 	]
 }

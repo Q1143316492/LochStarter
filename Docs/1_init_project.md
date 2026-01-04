@@ -18,7 +18,7 @@ UE 5.7 源码引擎，创建全空项目，跑通vscode和rider的断点运行�
 - 核心架构与通信
 
     - GameplayMessageRouter: 就是事件系统
-    - AsyncMixin 优化我需要加载A和B才能开始工作
+    - AsyncMixin 我需要加载A和B才能开始工作
 
 -  UI 扩展与通用功能
 
@@ -30,7 +30,7 @@ UE 5.7 源码引擎，创建全空项目，跑通vscode和rider的断点运行�
 
 - 模块化游戏功能
 
-    - GameFeatures 不用管，后面创建的时候会有的
+    - GameFeatures 不用管，后面创建gamefeature的时候会有的
     - ModularGameplayActors
 
 - 其他工具
@@ -136,7 +136,7 @@ UE 5.7 源码引擎，创建全空项目，跑通vscode和rider的断点运行�
 
 虽然很多蓝图炸了，但是动画，模型，曲线都正常过来了。
 
-## 5. Gameplay 类
+## 5. 体验定义
 
 Lyra的新概念，应该是world settings配置体验，体验里面配置pawn data。
 
@@ -148,4 +148,83 @@ pawn data 里面是技能，输入，摄像机。先顺着这个把game play 的
 
     - DefaultEngine.ini [/Script/Engine.Engine] 里面配置，断点一下没问题提交一次
 
+- 继承world settings 类，能配置experience，然后根据experience配置pawn data，pawn data。编译成功，然后我们总结一下干了啥
+
+首先
+
+Project Settings -> World Settings Class 修改为我们自定义的一个类。修改后DefaultEngine.ini 会自动添加一行
+
+主要是扩展了一个 data asset
+
+```cpp
+UCLASS(MinimalAPI)
+class ALochWorldSettings : public AWorldSettings
+{
+	GENERATED_BODY()
+protected:
+	UPROPERTY(EditDefaultsOnly, Category=GameMode)
+	TSoftClassPtr<ULochExperienceDefinition> DefaultGameplayExperience;
+};
+```
+
+创建插件，game feature content only。失败了。DefaultEngine.ini 里面会自动添加。lyra也有类似的配置
+
+只不过这里我要改成源码绝对路径
+
+```
+[/Script/GameFeaturesEditor.GameFeaturesEditorSettings]
+-PluginTemplates=(Path=(Path="../../Plugins/Runtime/GameFeatures/Templates/GameFeaturePluginContentOnly"),Label=NSLOCTEXT("[/Script/GameFeaturesEditor]", "E17DB7E94A2C0F5968A52E89959864C0", "Game Feature (Content Only)"),Description=NSLOCTEXT("[/Script/GameFeaturesEditor]", "CB5136B64AFAFBA5EDEA078FCAC7BCC9", "Create a new Game Feature Plugin."),DefaultGameFeatureDataClass=None,DefaultGameFeatureDataName="")
+-PluginTemplates=(Path=(Path="../../Plugins/Runtime/GameFeatures/Templates/GameFeaturePluginWithCode"),Label=NSLOCTEXT("[/Script/GameFeaturesEditor]", "90D6FD2A455176CEC42DD79A23AEC3B0", "Game Feature (with C++)"),Description=NSLOCTEXT("[/Script/GameFeaturesEditor]", "2B00A0E7415C8CEAA6DA609A141237F0", "Create a new Game Feature Plugin with a minimal amount of code."),DefaultGameFeatureDataClass=None,DefaultGameFeatureDataName="")
++PluginTemplates=(Path=(Path="F:/UE_57Src/UE571/Engine/Plugins/Runtime/GameFeatures/Templates/GameFeaturePluginContentOnly"),Label=NSLOCTEXT("[/Script/GameFeaturesEditor]", "E17DB7E94A2C0F5968A52E89959864C0", "Game Feature (Content Only)"),Description=NSLOCTEXT("[/Script/GameFeaturesEditor]", "CB5136B64AFAFBA5EDEA078FCAC7BCC9", "Create a new Game Feature Plugin."),DefaultGameFeatureDataClass=None,DefaultGameFeatureDataName="")
++PluginTemplates=(Path=(Path="F:/UE_57Src/UE571/Engine/Plugins/Runtime/GameFeatures/Templates/GameFeaturePluginWithCode"),Label=NSLOCTEXT("[/Script/GameFeaturesEditor]", "90D6FD2A455176CEC42DD79A23AEC3B0", "Game Feature (with C++)"),Description=NSLOCTEXT("[/Script/GameFeaturesEditor]", "2B00A0E7415C8CEAA6DA609A141237F0", "Create a new Game Feature Plugin with a minimal amount of code."),DefaultGameFeatureDataClass=None,DefaultGameFeatureDataName="")
+```
+
+创建成功后 `Plugins\GameFeatures\LochGameCore` 就有东西了，并且content下有个data asset 配置
+
+在里面创建蓝图 `Experiences\B_DefaultExperience` 继承自 `LochExperienceDefinition`
+
+```cpp
+/**
+ * Definition of an experience
+ */
+UCLASS(BlueprintType, Const)
+class LOCHSTARTERGAME_API ULochExperienceDefinition : public UPrimaryDataAsset
+{
+    GENERATED_BODY()
+public:
+	UPROPERTY(EditDefaultsOnly, Category = Gameplay)
+	TArray<FString> GameFeaturesToEnable;
+
+	UPROPERTY(EditDefaultsOnly, Category=Gameplay)
+	TObjectPtr<const ULochPawnData> DefaultPawnData;
+
+    UPROPERTY(EditDefaultsOnly, Instanced, Category="Actions")
+	TArray<TObjectPtr<UGameFeatureAction>> Actions;
+
+    UPROPERTY(EditDefaultsOnly, Category=Gameplay)
+	TArray<TObjectPtr<ULochExperienceActionSet>> ActionSets;
+};
+```
+
+UGameFeatureAction 相当于加载了当前game feature的时候执行的回调。
+
+例如 GameFeatureAction_AddComponents 就是一个Action，可以额外的添两个参数一个类和一个组件。在激活时就会给这个类动态加上这个组件。 
+
+这里除了 PawnData 之外, 都是对于 GameFeatureAction 的包装。
+
+pawn data 现在还什么都没有，后面写到了会加输入配置，例如input action那些。还有摄像机模式 camera mode
+
+```cpp
+UCLASS(MinimalAPI, BlueprintType, Const, Meta = (DisplayName = "Loch Pawn Data", ShortTooltip = "Data asset used to define a Pawn."))
+class ULochPawnData : public UPrimaryDataAsset
+{
+	GENERATED_BODY()
+
+public:
+	UE_API ULochPawnData(const FObjectInitializer& ObjectInitializer);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Loch|Pawn")
+	TSubclassOf<APawn> PawnClass;
+};
+```
 
