@@ -3,6 +3,8 @@
 	"EngineAssociation": "{3F39B6B3-4778-C21C-30C4-15B2F0D9E116}",
 	"Category": "",
 	"Description": "",
+	"EngineClass": "ULochStarterGameEngine",
+	"EditorEngineClass": "ULochStarterEditorEngine",
 	"Modules": [
 		{
 			"Name": "LochStarterGame",

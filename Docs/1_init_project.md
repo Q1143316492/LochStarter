@@ -128,7 +128,7 @@ UE 5.7 源码引擎，创建全空项目，跑通vscode和rider的断点运行�
 
 保持编译OK。
 
-## 导入蓝图资源
+## 4. 导入蓝图资源
 
 我决定先把 Content/Character 扣过来。X
 
@@ -136,9 +136,16 @@ UE 5.7 源码引擎，创建全空项目，跑通vscode和rider的断点运行�
 
 虽然很多蓝图炸了，但是动画，模型，曲线都正常过来了。
 
+## 5. Gameplay 类
 
+Lyra的新概念，应该是world settings配置体验，体验里面配置pawn data。
 
+pawn data 里面是技能，输入，摄像机。先顺着这个把game play 的几个核心类搞起来。
 
+- 自定义 Engine 类 LochStarterEditorEngine，ULochStarterGameEngine 
 
+    - 目前没实际作用。可以默认打开Plugins目录，如果是PIE且world settings设置了单机模式，就强制PIE单机模式。 应该是给那个炸弹人用的。但是现在对我们没用。简单扣过来。
+
+    - DefaultEngine.ini [/Script/Engine.Engine] 里面配置，断点一下没问题提交一次
 
 
