@@ -18,6 +18,8 @@
 #include "CommonSessionSubsystem.h"
 #include "LochLogChannels.h"
 #include "TimerManager.h"
+#include "Player/LochPlayerSpawningManagerComponent.h"
+
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(LochGameMode)
 
@@ -150,6 +152,34 @@ void ALochGameMode::HandleMatchAssignmentIfNotExpectingOne()
 	// 确定了 Experience 后，通知 GameMode 进行处理 (加载并应用)
 	OnMatchAssignmentGiven(ExperienceId, ExperienceIdSource);
 }
+
+void ALochGameMode::OnExperienceLoaded(const ULochExperienceDefinition* CurrentExperience)
+{
+	// Spawn any players that are already attached
+	//@TODO: Here we're handling only *player* controllers, but in GetDefaultPawnClassForController_Implementation we skipped all controllers
+	// GetDefaultPawnClassForController_Implementation might only be getting called for players anyways
+	for (FConstPlayerControllerIterator Iterator = GetWorld()->GetPlayerControllerIterator(); Iterator; ++Iterator)
+	{
+		APlayerController* PC = Cast<APlayerController>(*Iterator);
+		if ((PC != nullptr) && (PC->GetPawn() == nullptr))
+		{
+			if (PlayerCanRestart(PC))
+			{
+				RestartPlayer(PC);
+			}
+		}
+	}
+}
+
+bool ALochGameMode::IsExperienceLoaded() const
+{
+	check(GameState);
+	ULochExperienceManagerComponent* ExperienceComponent = GameState->FindComponentByClass<ULochExperienceManagerComponent>();
+	check(ExperienceComponent);
+
+	return ExperienceComponent->IsExperienceLoaded();
+}
+
 
 void ALochGameMode::OnMatchAssignmentGiven(FPrimaryAssetId ExperienceId, const FString& ExperienceIdSource)
 {
@@ -289,62 +319,145 @@ void ALochGameMode::OnUserInitializedForDedicatedServer(const UCommonUserInfo* U
 
 UClass* ALochGameMode::GetDefaultPawnClassForController_Implementation(AController* InController)
 {
-	// TODO: Implement
-	return DefaultPawnClass;
+	if (const ULochPawnData* PawnData = GetPawnDataForController(InController))
+	{
+		if (PawnData->PawnClass)
+		{
+			return PawnData->PawnClass;
+		}
+	}
+
+	return Super::GetDefaultPawnClassForController_Implementation(InController);
 }
 
 APawn* ALochGameMode::SpawnDefaultPawnAtTransform_Implementation(AController* NewPlayer, const FTransform& SpawnTransform)
 {
-	// TODO: Implement
-	return Super::SpawnDefaultPawnAtTransform_Implementation(NewPlayer, SpawnTransform);
+	FActorSpawnParameters SpawnInfo;
+	SpawnInfo.Instigator = GetInstigator();
+	SpawnInfo.ObjectFlags |= RF_Transient;	// Never save the default player pawns into a map.
+	SpawnInfo.bDeferConstruction = true;
+
+	if (UClass* PawnClass = GetDefaultPawnClassForController(NewPlayer))
+	{
+		if (APawn* SpawnedPawn = GetWorld()->SpawnActor<APawn>(PawnClass, SpawnTransform, SpawnInfo))
+		{
+			// TODO cwl 这个类还没有
+			// if (ULochPawnExtensionComponent* PawnExtComp = ULochPawnExtensionComponent::FindPawnExtensionComponent(SpawnedPawn))
+			// {
+			// 	if (const ULochPawnData* PawnData = GetPawnDataForController(NewPlayer))
+			// 	{
+			// 		PawnExtComp->SetPawnData(PawnData);
+			// 	}
+			// 	else
+			// 	{
+			// 		UE_LOG(LogLoch, Error, TEXT("Game mode was unable to set PawnData on the spawned pawn [%s]."), *GetNameSafe(SpawnedPawn));
+			// 	}
+			// }
+
+			SpawnedPawn->FinishSpawning(SpawnTransform);
+
+			return SpawnedPawn;
+		}
+		else
+		{
+			UE_LOG(LogLoch, Error, TEXT("Game mode was unable to spawn Pawn of class [%s] at [%s]."), *GetNameSafe(PawnClass), *SpawnTransform.ToHumanReadableString());
+		}
+	}
+	else
+	{
+		UE_LOG(LogLoch, Error, TEXT("Game mode was unable to spawn Pawn due to NULL pawn class."));
+	}
+
+	return nullptr;
 }
 
 bool ALochGameMode::ShouldSpawnAtStartSpot(AController* Player)
 {
-	// TODO: Implement
-	return Super::ShouldSpawnAtStartSpot(Player);
+	// We never want to use the start spot, always use the spawn management component.
+	return false;
 }
 
 void ALochGameMode::HandleStartingNewPlayer_Implementation(APlayerController* NewPlayer)
 {
-	Super::HandleStartingNewPlayer_Implementation(NewPlayer);
-	// TODO: Implement
+	// Delay starting new players until the experience has been loaded
+	// (players who log in prior to that will be started by OnExperienceLoaded)
+	if (IsExperienceLoaded())
+	{
+		Super::HandleStartingNewPlayer_Implementation(NewPlayer);
+	}
 }
 
 AActor* ALochGameMode::ChoosePlayerStart_Implementation(AController* Player)
 {
-	// TODO: Implement
+	if (ULochPlayerSpawningManagerComponent* PlayerSpawningComponent = GameState->FindComponentByClass<ULochPlayerSpawningManagerComponent>())
+	{
+		return PlayerSpawningComponent->ChoosePlayerStart(Player);
+	}
+	
 	return Super::ChoosePlayerStart_Implementation(Player);
 }
 
 void ALochGameMode::FinishRestartPlayer(AController* NewPlayer, const FRotator& StartRotation)
 {
+	if (ULochPlayerSpawningManagerComponent* PlayerSpawningComponent = GameState->FindComponentByClass<ULochPlayerSpawningManagerComponent>())
+	{
+		PlayerSpawningComponent->FinishRestartPlayer(NewPlayer, StartRotation);
+	}
+
 	Super::FinishRestartPlayer(NewPlayer, StartRotation);
-	// TODO: Implement
 }
 
 bool ALochGameMode::PlayerCanRestart_Implementation(APlayerController* Player)
 {
-	// TODO: Implement
-	return Super::PlayerCanRestart_Implementation(Player);
+	return ControllerCanRestart(Player);
+}
+
+bool ALochGameMode::ControllerCanRestart(AController* Controller)
+{
+	if (APlayerController* PC = Cast<APlayerController>(Controller))
+	{	
+		if (!Super::PlayerCanRestart_Implementation(PC))
+		{
+			return false;
+		}
+	}
+	else
+	{
+		// Bot version of Super::PlayerCanRestart_Implementation
+		if ((Controller == nullptr) || Controller->IsPendingKillPending())
+		{
+			return false;
+		}
+	}
+
+	if (ULochPlayerSpawningManagerComponent* PlayerSpawningComponent = GameState->FindComponentByClass<ULochPlayerSpawningManagerComponent>())
+	{
+		return PlayerSpawningComponent->ControllerCanRestart(Controller);
+	}
+
+	return true;
 }
 
 void ALochGameMode::InitGameState()
 {
 	Super::InitGameState();
-	// TODO: Implement
+	ULochExperienceManagerComponent* ExperienceComponent = GameState->FindComponentByClass<ULochExperienceManagerComponent>();
+	check(ExperienceComponent);
+	ExperienceComponent->CallOrRegister_OnExperienceLoaded(FOnLochExperienceLoaded::FDelegate::CreateUObject(this, &ThisClass::OnExperienceLoaded));
 }
 
 bool ALochGameMode::UpdatePlayerStartSpot(AController* Player, const FString& Portal, FString& OutErrorMessage)
 {
-	// TODO: Implement
-	return Super::UpdatePlayerStartSpot(Player, Portal, OutErrorMessage);
+	// Do nothing, we'll wait until PostLogin when we try to spawn the player for real.
+	// Doing anything right now is no good, systems like team assignment haven't even occurred yet.
+	return true;
 }
 
 void ALochGameMode::GenericPlayerInitialization(AController* NewPlayer)
 {
 	Super::GenericPlayerInitialization(NewPlayer);
-	// TODO: Implement
+
+	OnGameModePlayerInitialized.Broadcast(this, NewPlayer);
 }
 
 void ALochGameMode::FailedToRestartPlayer(AController* NewPlayer)

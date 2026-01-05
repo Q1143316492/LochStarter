@@ -233,3 +233,11 @@ namespace Loch
 
 # 平台设置
 
+PlatformEmulationSettings
+
+# LochPlayerStarter
+
+ULochPlayerSpawningManagerComponent 会有这个流程加载玩家，是game feature动态加上去的。
+
+
+
