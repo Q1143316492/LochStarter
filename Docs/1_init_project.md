@@ -355,3 +355,7 @@ void ULochExperienceManagerComponent::OnExperienceFullLoadCompleted()
 
 另外 `ULochExperienceManagerComponent::EndPlay` 里面会处理卸载逻辑
 
+如何验证。把输入丢进来断点一下
+
+## 7. Asset Manager 资产管理器
+
