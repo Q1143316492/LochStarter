@@ -34,3 +34,5 @@ public:
 	bool ForceStandaloneNetMode = false;
 #endif
 };
+
+#undef UE_API

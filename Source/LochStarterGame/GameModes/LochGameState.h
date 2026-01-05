@@ -13,6 +13,7 @@ struct FLyraVerbMessage;
 class APlayerState;
 class UAbilitySystemComponent;
 class ULochAbilitySystemComponent;
+class ULochExperienceManagerComponent;
 class UObject;
 struct FFrame;
 
@@ -34,6 +35,9 @@ public:
 	//~End of IAbilitySystemInterface
 
 private:
+	UPROPERTY()
+	TObjectPtr<ULochExperienceManagerComponent> ExperienceManagerComponent;
+	
 	UPROPERTY(VisibleAnywhere, Category = "Loch|GameState")
 	TObjectPtr<ULochAbilitySystemComponent> AbilitySystemComponent;
 

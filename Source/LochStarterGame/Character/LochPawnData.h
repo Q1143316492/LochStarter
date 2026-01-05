@@ -21,3 +21,5 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Loch|Pawn")
 	TSubclassOf<APawn> PawnClass;
 };
+
+#undef UE_API

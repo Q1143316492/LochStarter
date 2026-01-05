@@ -249,3 +249,109 @@ ALochGameMode::ALochGameMode(const FObjectInitializer& ObjectInitializer)
 
 关联的 move ment component, ability system 也都是空类，先过编译。不指望任何流程生效。然后就不能动了，game mode 生效。
 
+## 6. 体验管理器
+
+ULochExperienceManager 只是一个引用计数记录
+
+ULochExperienceManagerComponent 是一个 game state component。
+
+```cpp
+UCLASS(MinimalAPI, Config = Game)
+class ALochGameState : public AModularGameStateBase, public IAbilitySystemInterface
+{
+	GENERATED_BODY()
+
+private:
+	UPROPERTY()
+	TObjectPtr<ULochExperienceManagerComponent> ExperienceManagerComponent;
+};
+```
+并且在构造函数要 `ExperienceManagerComponent = CreateDefaultSubobject<ULochExperienceManagerComponent>(TEXT("..."));`初始化
+
+他的加载位于game mode 的 init game 里面
+
+```cpp
+void ALochGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+	GetWorld()->GetTimerManager().SetTimerForNextTick(this, &ThisClass::HandleMatchAssignmentIfNotExpectingOne);
+}
+```
+
+选择 experience 的逻辑位于 `HandleMatchAssignmentIfNotExpectingOne` 里面
+```cpp
+void ALochGameMode::HandleMatchAssignmentIfNotExpectingOne()
+{
+	FPrimaryAssetId ExperienceId;
+	FString ExperienceIdSource;
+
+	// 优先级顺序 (最高优先级胜出)
+	//  - 匹配分配 (如果存在)
+	//  - URL 选项覆盖 (URL Options override)
+	//  - 开发者设置 (仅 PIE 模式)
+	//  - 命令行覆盖 (Command Line override)
+	//  - 世界设置 (World Settings)
+	//  - 专用服务器 (Dedicated server)
+	//  - 默认体验 (Default experience)
+
+	UWorld* World = GetWorld();
+
+	// 1. 检查 URL 参数中是否有 "Experience" 选项 (例如: ?Experience=B_MyExperience)
+	// 2. 检查命令行参数中是否有 "Experience=" 设置 (例如: -Experience=B_MyExperience)
+	// 3. 检查当前关卡的世界设置 (World Settings) 中是否配置了默认 Experience
+	// 验证找到的 Experience 是否有效 (是否存在于 AssetManager 中)
+	// 4. 最终回退方案：使用默认 Experience
+
+	// 确定了 Experience 后，通知 GameMode 进行处理 (加载并应用)
+	OnMatchAssignmentGiven(ExperienceId, ExperienceIdSource);
+}
+```
+
+然后就是 
+ExperienceComponent->SetCurrentExperience(ExperienceId) -> StartExperienceLoad
+```cpp
+void ULochExperienceManagerComponent::StartExperienceLoad()
+{
+    // 客户端 OnRep_CurrentExperience->StartExperienceLoad也会这么走到这里
+    // 加载资产 ...
+}
+```
+TODO 资产加载流程总结一下 ChangeBundleStateForPrimaryAssets 和 LoadAssetList
+加载完成到了 `ULochExperienceManagerComponent::OnExperienceLoadComplete`
+
+```cpp
+void ULochExperienceManagerComponent::OnExperienceLoadComplete()
+{
+    // 验证plugin URL是否有效
+    // 加载并激活 GameFeaturePlugins
+}
+```
+
+最后是`ULochExperienceManagerComponent::OnExperienceFullLoadCompleted` 处理一些回调后，出发相关代理
+
+```cpp
+void ULochExperienceManagerComponent::OnExperienceFullLoadCompleted()
+{
+	// 可能的延迟逻辑 ...
+
+	LoadState = ELochExperienceLoadState::ExecutingActions;
+
+    // ...
+    // 遍历 UGameFeatureAction 触发 OnGameFeatureRegistering, OnGameFeatureLoading, OnGameFeatureActivating
+
+	LoadState = ELochExperienceLoadState::Loaded;
+
+    // 按优先级广播加载完成事件
+	OnExperienceLoaded_HighPriority.Broadcast(CurrentExperience);
+	OnExperienceLoaded_HighPriority.Clear();
+
+	OnExperienceLoaded.Broadcast(CurrentExperience);
+	OnExperienceLoaded.Clear();
+
+	OnExperienceLoaded_LowPriority.Broadcast(CurrentExperience);
+	OnExperienceLoaded_LowPriority.Clear();
+}
+```
+
+另外 `ULochExperienceManagerComponent::EndPlay` 里面会处理卸载逻辑
+

@@ -29,6 +29,11 @@ public:
 	ULochAbilitySystemComponent* GetLochAbilitySystemComponent() const { return AbilitySystemComponent; }
 	UE_API virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	template <class T>
+	const T* GetPawnData() const { return Cast<T>(PawnData); }
+
+	UE_API void SetPawnData(const ULochPawnData* InPawnData);
+
 	//~UObject interface
 	UE_API virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 	//~End of UObject interface
