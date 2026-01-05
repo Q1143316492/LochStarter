@@ -201,7 +201,9 @@ ULyraGameInstance::OnPreClientTravelToSession
 
 内容先空着，别忘了去project settings 里面把 local player class 和 game viewport client class 设置一下
 
-# Editor Preferences -> Lyra Develop Settings那个功能
+# 开发者设置
+
+Editor Preferences -> Lyra Develop Settings那个面板
 
 Development/LochDeveloperSettings.cpp 这个相当于只是一个配置，具体用到的地方在具体写读值怎么用。
 
@@ -228,4 +230,6 @@ namespace Loch
 }
 ```
 他需要你去用到的地方把命令加上，例如这里是player controller cpp的头上
+
+# 平台设置
 
