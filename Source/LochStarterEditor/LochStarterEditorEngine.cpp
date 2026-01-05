@@ -7,6 +7,7 @@
 #include "Widgets/Notifications/SNotificationList.h"
 #include "GameModes/LochWorldSettings.h"
 #include "Development/LochDeveloperSettings.h"
+#include "Development/LochPlatformEmulationSettings.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(LochStarterEditorEngine)
 
@@ -70,7 +71,7 @@ FGameInstancePIEResult ULochStarterEditorEngine::PreCreatePIEInstances(const boo
 
 	// @TODO: Should add delegates that a *non-editor* module could bind to for PIE start/stop instead of poking directly
 	GetDefault<ULochDeveloperSettings>()->OnPlayInEditorStarted();
-	// GetDefault<ULyraPlatformEmulationSettings>()->OnPlayInEditorStarted();
+	GetDefault<ULochPlatformEmulationSettings>()->OnPlayInEditorStarted();
 
 	FGameInstancePIEResult Result = Super::PreCreatePIEServerInstance(bAnyBlueprintErrors, bStartInSpectatorMode, PIEStartTime, bSupportsOnlinePIE, InNumOnlinePIEInstances);
 	return Result;
