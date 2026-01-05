@@ -203,4 +203,29 @@ ULyraGameInstance::OnPreClientTravelToSession
 
 # Editor Preferences -> Lyra Develop Settings那个功能
 
+Development/LochDeveloperSettings.cpp 这个相当于只是一个配置，具体用到的地方在具体写读值怎么用。
+
+DefaultEditorPerProjectUserSettings 这个扣过来
+
+和类名有关
+```cpp
+UCLASS(config=EditorPerProjectUserSettings, MinimalAPI)
+class ULochDeveloperSettings : public UDeveloperSettingsBackedByCVars {}
+```
+
+启动会报错 LochPC.ShouldAlwaysPlayForceFeedback 未找到
+
+```cpp
+namespace Loch
+{
+	namespace Input
+	{
+		static int32 ShouldAlwaysPlayForceFeedback = 0;
+		static FAutoConsoleVariableRef CVarShouldAlwaysPlayForceFeedback(TEXT("LochPC.ShouldAlwaysPlayForceFeedback"),
+			ShouldAlwaysPlayForceFeedback,
+			TEXT("Should force feedback effects be played, even if the last input device was not a gamepad?"));
+	}
+}
+```
+他需要你去用到的地方把命令加上，例如这里是player controller cpp的头上
 
