@@ -295,3 +295,9 @@ UE_API virtual void OnReactivated() override; // 玩家重新连接，修改连�
 
 完成其他队伍接口，还有 game tag stack 的实现
 
+# player controller
+
+- camera
+- 尝试回放的接口
+- 发送cheat指令的接口
+- 一个http服务来收指令
