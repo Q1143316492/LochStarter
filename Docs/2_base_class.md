@@ -301,3 +301,11 @@ UE_API virtual void OnReactivated() override; // 玩家重新连接，修改连�
 - 尝试回放的接口
 - 发送cheat指令的接口
 - 一个http服务来收指令
+
+# local player controller
+
+- team change
+- local settings 就是配置文件 (game instance)
+- shared settings 用户登录后保存的设置
+
+要配置 GameUserSettingsClassName
