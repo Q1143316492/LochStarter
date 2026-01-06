@@ -239,5 +239,42 @@ PlatformEmulationSettings
 
 ULochPlayerSpawningManagerComponent 会有这个流程加载玩家，是game feature动态加上去的。
 
+# UGameUIManagerSubsystem
+
+```cpp
+int32 UCommonGameInstance::AddLocalPlayer(ULocalPlayer* NewPlayer, FPlatformUserId UserId)
+{
+	int32 ReturnVal = Super::AddLocalPlayer(NewPlayer, UserId);
+	if (ReturnVal != INDEX_NONE)
+	{
+		if (!PrimaryPlayer.IsValid())
+		{
+			UE_LOG(LogCommonGame, Log, TEXT("AddLocalPlayer: Set %s to Primary Player"), *NewPlayer->GetName());
+			PrimaryPlayer = NewPlayer;
+		}
+		
+		GetSubsystem<UGameUIManagerSubsystem>()->NotifyPlayerAdded(Cast<UCommonLocalPlayer>(NewPlayer));
+	}
+	
+	return ReturnVal;
+}
+```
+没有这个东西，就炸了，先补一个
+
+Game/UI
+W_OverallUILayout 是一个层级的文件
+
+B_LyraUIPolicy 是一个 policy文件。由于基类是插件的，所以蓝图是好的。
+
+但是我们简单改个名，避免某些东西莫名其妙是正常的。然后 DefaultGame.ini 就这么配吧
+
+```ini
+[/Script/LochStarterGame.LochUIManagerSubsystem]
+DefaultUIPolicyClass=/Game/UI/B_LochUIPolicy.B_LochUIPolicy_C
+```
+
+然后又找不到 experience definition 预计是 asset manager 里面是扫描路径没配对，检查一下。
+
+
 
 

@@ -26,14 +26,14 @@ public:
 	static UE_API const ULochGameData& Get();
 
 public:
-	UPROPERTY(EditDefaultsOnly, Category = "Default Gameplay Effects", meta = (DisplayName = "Damage Gameplay Effect (SetByCaller)"))
-	TSoftClassPtr<UGameplayEffect> DamageGameplayEffect_SetByCaller;
+	// UPROPERTY(EditDefaultsOnly, Category = "Default Gameplay Effects", meta = (DisplayName = "Damage Gameplay Effect (SetByCaller)"))
+	// TSoftClassPtr<UGameplayEffect> DamageGameplayEffect_SetByCaller;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Default Gameplay Effects", meta = (DisplayName = "Heal Gameplay Effect (SetByCaller)"))
-	TSoftClassPtr<UGameplayEffect> HealGameplayEffect_SetByCaller;
+	// UPROPERTY(EditDefaultsOnly, Category = "Default Gameplay Effects", meta = (DisplayName = "Heal Gameplay Effect (SetByCaller)"))
+	// TSoftClassPtr<UGameplayEffect> HealGameplayEffect_SetByCaller;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Default Gameplay Effects")
-	TSoftClassPtr<UGameplayEffect> DynamicTagGameplayEffect;
+	// UPROPERTY(EditDefaultsOnly, Category = "Default Gameplay Effects")
+	// TSoftClassPtr<UGameplayEffect> DynamicTagGameplayEffect;
 };
 
 #undef UE_API

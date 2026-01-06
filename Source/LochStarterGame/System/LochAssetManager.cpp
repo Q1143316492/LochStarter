@@ -100,9 +100,7 @@ void ULochAssetManager::StartInitialLoading()
     // 完成扫描，即使加载被推迟也需要完成扫描
 	Super::StartInitialLoading();
 
-	return; // TODO 临时跳过初始化
-
-	STARTUP_JOB(InitializeGameplayCueManager());
+	// STARTUP_JOB(InitializeGameplayCueManager());
 
 	{
 		// Load base game data asset
