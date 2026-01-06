@@ -275,6 +275,23 @@ DefaultUIPolicyClass=/Game/UI/B_LochUIPolicy.B_LochUIPolicy_C
 
 然后又找不到 experience definition 预计是 asset manager 里面是扫描路径没配对，检查一下。
 
+能跑了
 
+# LochPlayerState 
 
+PreInitializeComponents 啥都不干
+PostInitializeComponents 初始化ability comp, 注册体验加载完成回调。
+在回调中把pawn data存一下，然后通过属性同步传给客户端
+
+```
+//~APlayerState interface
+UE_API virtual void Reset() override;
+UE_API virtual void ClientInitialize(AController* C) override;
+UE_API virtual void CopyProperties(APlayerState* PlayerState) override;
+UE_API virtual void OnDeactivated() override; // 玩家断开连接，销毁，修改连接状态
+UE_API virtual void OnReactivated() override; // 玩家重新连接，修改连接状态
+//~End of APlayerState interface
+```
+
+完成其他队伍接口，还有 game tag stack 的实现
 
