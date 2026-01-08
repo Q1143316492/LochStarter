@@ -1,16 +1,16 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "Settings/LochSettingsShared.h"
-#include "Player/LochLocalPlayer.h"
+
+#include "EnhancedInputSubsystems.h"
+#include "Framework/Application/SlateApplication.h"
 #include "Internationalization/Culture.h"
 #include "Misc/App.h"
 #include "Misc/ConfigCacheIni.h"
-
-// #include "Framework/Application/SlateApplication.h"
-// #include "Rendering/SlateRenderer.h"
-// #include "SubtitleDisplaySubsystem.h"
-// #include "EnhancedInputSubsystems.h"
-// #include "UserSettings/EnhancedInputUserSettings.h"
+#include "Player/LochLocalPlayer.h"
+#include "Rendering/SlateRenderer.h"
+#include "SubtitleDisplaySubsystem.h"
+#include "UserSettings/EnhancedInputUserSettings.h"
 
 #include UE_INLINE_GENERATED_CPP_BY_NAME(LochSettingsShared)
 
@@ -87,17 +87,30 @@ void ULochSettingsShared::SaveSettings()
 {
 	// Schedule an async save because it's okay if it fails
 	AsyncSaveGameToSlotForLocalPlayer();
-	
-	// TODO: EnhancedInputUserSettings save
+
+	// TODO_BH: Move this to the serialize function instead with a bumped version number
+	if (UEnhancedInputLocalPlayerSubsystem* System = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(OwningPlayer))
+	{
+		if (UEnhancedInputUserSettings* InputSettings = System->GetUserSettings())
+		{
+			InputSettings->AsyncSaveSettings();
+		}
+	}
 }
 
 void ULochSettingsShared::ApplySettings()
 {
-	// ApplySubtitleOptions();
+	ApplySubtitleOptions();
 	ApplyBackgroundAudioSettings();
 	ApplyCultureSettings();
-	
-	// TODO: EnhancedInputUserSettings apply
+
+	if (UEnhancedInputLocalPlayerSubsystem* System = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(OwningPlayer))
+	{
+		if (UEnhancedInputUserSettings* InputSettings = System->GetUserSettings())
+		{
+			InputSettings->ApplySettings();
+		}
+	}
 }
 
 void ULochSettingsShared::SetColorBlindStrength(int32 InColorBlindStrength)
@@ -106,11 +119,8 @@ void ULochSettingsShared::SetColorBlindStrength(int32 InColorBlindStrength)
 	if (ColorBlindStrength != InColorBlindStrength)
 	{
 		ColorBlindStrength = InColorBlindStrength;
-		// TODO: Apply color blind settings to Slate renderer
-		/*
 		FSlateApplication::Get().GetRenderer()->SetColorVisionDeficiencyType(
 			(EColorVisionDeficiency)(int32)ColorBlindMode, (int32)ColorBlindStrength, true, false);
-		*/
 	}
 }
 
@@ -124,17 +134,28 @@ void ULochSettingsShared::SetColorBlindMode(ELochColorBlindMode InMode)
 	if (ColorBlindMode != InMode)
 	{
 		ColorBlindMode = InMode;
-		// TODO: Apply color blind settings to Slate renderer
-		/*
 		FSlateApplication::Get().GetRenderer()->SetColorVisionDeficiencyType(
 			(EColorVisionDeficiency)(int32)ColorBlindMode, (int32)ColorBlindStrength, true, false);
-		*/
 	}
 }
 
 ELochColorBlindMode ULochSettingsShared::GetColorBlindMode() const
 {
 	return ColorBlindMode;
+}
+
+void ULochSettingsShared::ApplySubtitleOptions()
+{
+	if (USubtitleDisplaySubsystem* SubtitleSystem = USubtitleDisplaySubsystem::Get(OwningPlayer))
+	{
+		FSubtitleFormat SubtitleFormat;
+		SubtitleFormat.SubtitleTextSize = SubtitleTextSize;
+		SubtitleFormat.SubtitleTextColor = SubtitleTextColor;
+		SubtitleFormat.SubtitleTextBorder = SubtitleTextBorder;
+		SubtitleFormat.SubtitleBackgroundOpacity = SubtitleBackgroundOpacity;
+
+		SubtitleSystem->SetSubtitleDisplayOptions(SubtitleFormat);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -230,4 +251,11 @@ void ULochSettingsShared::ResetToDefaultCulture()
 	ClearPendingCulture();
 	bResetToDefaultCulture = true;
 	bIsDirty = true;
+}
+
+//////////////////////////////////////////////////////////////////////
+
+void ULochSettingsShared::ApplyInputSensitivity()
+{
+	// Placeholder: hook input sensitivity values into the input system if needed.
 }

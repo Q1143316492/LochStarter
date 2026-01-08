@@ -75,3 +75,6 @@ Performance/
     LochPerformanceSettings
     LochPerformanceStatTypes
 
+## settings shared
+
+保存文件的内容

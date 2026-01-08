@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/SaveGame.h"
+#include "SubtitleDisplayOptions.h"
 #include "UObject/ObjectPtr.h"
 #include "LochSettingsShared.generated.h"
 
@@ -31,7 +32,24 @@ enum class ELochAllowBackgroundAudioSetting : uint8
 	Num UMETA(Hidden),
 };
 
-// TODO: ELochGamepadSensitivity
+UENUM(BlueprintType)
+enum class ELochGamepadSensitivity : uint8
+{
+	Invalid = 0		UMETA(Hidden),
+
+	Slow			UMETA(DisplayName = "01 - Slow"),
+	SlowPlus		UMETA(DisplayName = "02 - Slow+"),
+	SlowPlusPlus	UMETA(DisplayName = "03 - Slow++"),
+	Normal			UMETA(DisplayName = "04 - Normal"),
+	NormalPlus		UMETA(DisplayName = "05 - Normal+"),
+	NormalPlusPlus	UMETA(DisplayName = "06 - Normal++"),
+	Fast			UMETA(DisplayName = "07 - Fast"),
+	FastPlus		UMETA(DisplayName = "08 - Fast+"),
+	FastPlusPlus	UMETA(DisplayName = "09 - Fast++"),
+	Insane			UMETA(DisplayName = "10 - Insane"),
+
+	MAX				UMETA(Hidden),
+};
 
 /**
  * ULochSettingsShared - The "Shared" settings are stored as part of the USaveGame system, these settings are not machine
@@ -179,7 +197,49 @@ private:
 
 	////////////////////////////////////////////////////////
 	// Subtitles
-	// TODO: Subtitles support
+public:
+	UFUNCTION()
+	bool GetSubtitlesEnabled() const { return bEnableSubtitles; }
+	UFUNCTION()
+	void SetSubtitlesEnabled(bool Value) { ChangeValueAndDirty(bEnableSubtitles, Value); }
+
+	UFUNCTION()
+	ESubtitleDisplayTextSize GetSubtitlesTextSize() const { return SubtitleTextSize; }
+	UFUNCTION()
+	void SetSubtitlesTextSize(ESubtitleDisplayTextSize Value) { ChangeValueAndDirty(SubtitleTextSize, Value); ApplySubtitleOptions(); }
+
+	UFUNCTION()
+	ESubtitleDisplayTextColor GetSubtitlesTextColor() const { return SubtitleTextColor; }
+	UFUNCTION()
+	void SetSubtitlesTextColor(ESubtitleDisplayTextColor Value) { ChangeValueAndDirty(SubtitleTextColor, Value); ApplySubtitleOptions(); }
+
+	UFUNCTION()
+	ESubtitleDisplayTextBorder GetSubtitlesTextBorder() const { return SubtitleTextBorder; }
+	UFUNCTION()
+	void SetSubtitlesTextBorder(ESubtitleDisplayTextBorder Value) { ChangeValueAndDirty(SubtitleTextBorder, Value); ApplySubtitleOptions(); }
+
+	UFUNCTION()
+	ESubtitleDisplayBackgroundOpacity GetSubtitlesBackgroundOpacity() const { return SubtitleBackgroundOpacity; }
+	UFUNCTION()
+	void SetSubtitlesBackgroundOpacity(ESubtitleDisplayBackgroundOpacity Value) { ChangeValueAndDirty(SubtitleBackgroundOpacity, Value); ApplySubtitleOptions(); }
+
+	void ApplySubtitleOptions();
+
+private:
+	UPROPERTY()
+	bool bEnableSubtitles = true;
+
+	UPROPERTY()
+	ESubtitleDisplayTextSize SubtitleTextSize = ESubtitleDisplayTextSize::Medium;
+
+	UPROPERTY()
+	ESubtitleDisplayTextColor SubtitleTextColor = ESubtitleDisplayTextColor::White;
+
+	UPROPERTY()
+	ESubtitleDisplayTextBorder SubtitleTextBorder = ESubtitleDisplayTextBorder::None;
+
+	UPROPERTY()
+	ESubtitleDisplayBackgroundOpacity SubtitleBackgroundOpacity = ESubtitleDisplayBackgroundOpacity::Medium;
 
 	////////////////////////////////////////////////////////
 	// Shared audio settings
@@ -225,6 +285,76 @@ private:
 
 	/* If true, resets the culture to default. */
 	bool bResetToDefaultCulture = false;
+
+	////////////////////////////////////////////////////////
+	// Mouse/Gamepad sensitivity
+public:
+	UFUNCTION()
+	double GetMouseSensitivityX() const { return MouseSensitivityX; }
+	UFUNCTION()
+	void SetMouseSensitivityX(double NewValue) { ChangeValueAndDirty(MouseSensitivityX, NewValue); ApplyInputSensitivity(); }
+
+	UFUNCTION()
+	double GetMouseSensitivityY() const { return MouseSensitivityY; }
+	UFUNCTION()
+	void SetMouseSensitivityY(double NewValue) { ChangeValueAndDirty(MouseSensitivityY, NewValue); ApplyInputSensitivity(); }
+
+	UFUNCTION()
+	double GetTargetingMultiplier() const { return TargetingMultiplier; }
+	UFUNCTION()
+	void SetTargetingMultiplier(double NewValue) { ChangeValueAndDirty(TargetingMultiplier, NewValue); ApplyInputSensitivity(); }
+
+	UFUNCTION()
+	bool GetInvertVerticalAxis() const { return bInvertVerticalAxis; }
+	UFUNCTION()
+	void SetInvertVerticalAxis(bool NewValue) { ChangeValueAndDirty(bInvertVerticalAxis, NewValue); ApplyInputSensitivity(); }
+
+	UFUNCTION()
+	bool GetInvertHorizontalAxis() const { return bInvertHorizontalAxis; }
+	UFUNCTION()
+	void SetInvertHorizontalAxis(bool NewValue) { ChangeValueAndDirty(bInvertHorizontalAxis, NewValue); ApplyInputSensitivity(); }
+
+private:
+	/** Holds the mouse horizontal sensitivity */
+	UPROPERTY()
+	double MouseSensitivityX = 1.0;
+
+	/** Holds the mouse vertical sensitivity */
+	UPROPERTY()
+	double MouseSensitivityY = 1.0;
+
+	/** Multiplier applied while Aiming down sights. */
+	UPROPERTY()
+	double TargetingMultiplier = 0.5;
+
+	/** If true then the vertical look axis should be inverted */
+	UPROPERTY()
+	bool bInvertVerticalAxis = false;
+
+	/** If true then the horizontal look axis should be inverted */
+	UPROPERTY()
+	bool bInvertHorizontalAxis = false;
+
+	////////////////////////////////////////////////////////
+	// Gamepad sensitivity presets
+public:
+	UFUNCTION()
+	ELochGamepadSensitivity GetGamepadLookSensitivityPreset() const { return GamepadLookSensitivityPreset; }
+	UFUNCTION()
+	void SetLookSensitivityPreset(ELochGamepadSensitivity NewValue) { ChangeValueAndDirty(GamepadLookSensitivityPreset, NewValue); ApplyInputSensitivity(); }
+
+	UFUNCTION()
+	ELochGamepadSensitivity GetGamepadTargetingSensitivityPreset() const { return GamepadTargetingSensitivityPreset; }
+	UFUNCTION()
+	void SetGamepadTargetingSensitivityPreset(ELochGamepadSensitivity NewValue) { ChangeValueAndDirty(GamepadTargetingSensitivityPreset, NewValue); ApplyInputSensitivity(); }
+
+	void ApplyInputSensitivity();
+
+private:
+	UPROPERTY()
+	ELochGamepadSensitivity GamepadLookSensitivityPreset = ELochGamepadSensitivity::Normal;
+	UPROPERTY()
+	ELochGamepadSensitivity GamepadTargetingSensitivityPreset = ELochGamepadSensitivity::Normal;
 
 private:
 	bool bIsDirty = false;
