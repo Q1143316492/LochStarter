@@ -309,3 +309,6 @@ UE_API virtual void OnReactivated() override; // 玩家重新连接，修改连�
 - shared settings 用户登录后保存的设置
 
 要配置 GameUserSettingsClassName
+
+# settings
+
