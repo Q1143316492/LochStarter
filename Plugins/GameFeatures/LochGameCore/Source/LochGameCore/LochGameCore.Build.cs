@@ -9,7 +9,7 @@ public class LochGameCore : ModuleRules
         PublicDependencyModuleNames.AddRange(new string[]
         {
 				"Core",
-				"LochStarterGame",
+				// "LochStarterGame",
 				"ModularGameplay",
 				"CommonGame",
         });
