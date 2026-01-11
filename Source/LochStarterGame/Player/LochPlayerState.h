@@ -60,6 +60,8 @@ public:
 	ULochAbilitySystemComponent* GetLochAbilitySystemComponent() const { return AbilitySystemComponent; }
 	UE_API virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
+	static UE_API const FName NAME_LochAbilityReady;
+
 	template <class T>
 	const T* GetPawnData() const { return Cast<T>(PawnData); }
 
@@ -83,8 +85,6 @@ public:
 	UE_API virtual FGenericTeamId GetGenericTeamId() const override;
 	UE_API virtual FOnLochTeamIndexChangedDelegate* GetOnTeamIndexChangedDelegate() override;
 	//~End of ILochTeamAgentInterface interface
-
-	static UE_API const FName NAME_LochAbilityReady;
 
 	UE_API void SetPlayerConnectionType(ELochPlayerConnectionType NewType);
 	ELochPlayerConnectionType GetPlayerConnectionType() const { return MyPlayerConnectionType; }

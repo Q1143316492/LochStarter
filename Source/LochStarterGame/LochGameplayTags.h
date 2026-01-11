@@ -8,7 +8,7 @@ namespace LochGameplayTags
 {
 	LOCHSTARTERGAME_API	FGameplayTag FindTagByString(const FString& TagString, bool bMatchPartialString = false);
 
-	// Declare all of the custom native tags that Game will use
+	// 声明游戏将使用的所有自定义本机标签
 	LOCHSTARTERGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_ActivateFail_IsDead);
 	LOCHSTARTERGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_ActivateFail_Cooldown);
 	LOCHSTARTERGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Ability_ActivateFail_Cost);
@@ -46,7 +46,7 @@ namespace LochGameplayTags
 	LOCHSTARTERGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Death_Dying);
 	LOCHSTARTERGAME_API	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Status_Death_Dead);
 
-	// These are mappings from MovementMode enums to GameplayTags associated with those enums (below)
+	// 这些是从 MovementMode 枚举到与这些枚举相关联的 GameplayTags 的映射（如下所示）
 	LOCHSTARTERGAME_API	extern const TMap<uint8, FGameplayTag> MovementModeTagMap;
 	LOCHSTARTERGAME_API	extern const TMap<uint8, FGameplayTag> CustomMovementModeTagMap;
 
