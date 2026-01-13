@@ -14,14 +14,19 @@
 enum class ELochEditorLoadMode
 {
 	// Loads all cues upfront; longer loading speed in the editor but short PIE times and effects never fail to play
+	// 预加载所有 Cue；在编辑器中加载时间更长，但 PIE 时间较短且效果从不播放失败
 	LoadUpfront,
 
 	// Outside of editor: Async loads as cue tag are registered
 	// In editor: Async loads when cues are invoked
 	//   Note: This can cause some 'why didn't I see the effect for X' issues in PIE and is good for iteration speed but otherwise bad for designers
+	// 编辑器外：在注册 cue 标签时进行异步加载
+	// 编辑器内：在调用 cue 时进行异步加载
+	//  注意：这可能会在 PIE 中导致一些“我为什么没有看到 X 的效果”问题，对于迭代速度来说很好，但对设计师来说却不好
 	PreloadAsCuesAreReferenced_GameOnly,
 
 	// Async loads as cue tag are registered
+	// 在注册 cue 标签时进行异步加载
 	PreloadAsCuesAreReferenced
 };
 
@@ -358,11 +363,15 @@ void ULochGameplayCueManager::UpdateDelayLoadDelegateListeners()
 	switch (LochGameplayCueManagerCvars::LoadMode)
 	{
 	case ELochEditorLoadMode::LoadUpfront:
+		// 引擎流程，预加载好了
 		return;
 	case ELochEditorLoadMode::PreloadAsCuesAreReferenced_GameOnly:
 #if WITH_EDITOR
 		if (GIsEditor)
 		{
+			// 编辑器下
+			// 引擎流程没跑，自定义流程也没跑
+			// 导致上面 我为什么没有看到 X 的效果 问题
 			return;
 		}
 #endif
@@ -371,6 +380,7 @@ void ULochGameplayCueManager::UpdateDelayLoadDelegateListeners()
 		break;
 	}
 
+	// 这里相当于自定义的cue加载流程
 	UGameplayTagsManager::Get().OnGameplayTagLoadedDelegate.AddUObject(this, &ThisClass::OnGameplayTagLoaded);
 	FCoreUObjectDelegates::GetPostGarbageCollect().AddUObject(this, &ThisClass::HandlePostGarbageCollect);
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &ThisClass::HandlePostLoadMap);

@@ -7,6 +7,7 @@
 #include "Containers/Ticker.h"
 #include "LochHotfixManager.generated.h"
 
+// 注意需要 ini 配置这个类
 UCLASS()
 class ULochHotfixManager : public UOnlineHotfixManager
 {

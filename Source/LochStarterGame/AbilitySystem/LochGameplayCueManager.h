@@ -10,6 +10,7 @@ class UObject;
 class UWorld;
 struct FObjectKey;
 
+// 优化体验，可以完全走引擎流程吧
 UCLASS()
 class ULochGameplayCueManager : public UGameplayCueManager
 {
