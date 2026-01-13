@@ -100,7 +100,7 @@ void ULochAssetManager::StartInitialLoading()
     // 完成扫描，即使加载被推迟也需要完成扫描
 	Super::StartInitialLoading();
 
-	// STARTUP_JOB(InitializeGameplayCueManager());
+	STARTUP_JOB(InitializeGameplayCueManager());
 
 	{
 		// Load base game data asset
@@ -176,10 +176,9 @@ void ULochAssetManager::InitializeGameplayCueManager()
 {
 	SCOPED_BOOT_TIMING("ULochAssetManager::InitializeGameplayCueManager");
 
-	// TODO cwl 没有挂ability system，拿不到
-	// ULochGameplayCueManager* GCM = ULochGameplayCueManager::Get();
-	// check(GCM);
-	// GCM->LoadAlwaysLoadedCues();
+	ULochGameplayCueManager* GCM = ULochGameplayCueManager::Get();
+	check(GCM);
+	GCM->LoadAlwaysLoadedCues();
 }
 
 const ULochGameData& ULochAssetManager::GetGameData()
