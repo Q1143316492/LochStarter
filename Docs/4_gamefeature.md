@@ -334,5 +334,10 @@ GlobalGameplayCueManagerName=None
 
 没有这个 cue manager 是空，当然目前我们ability也没搞
 
+LochGameFeaturePolicy 这个主要是提供了一些mgr的回调，为game feature 时机做一些定制化处理
+
+## ULyraRuntimeOptions
+
+## ULyraTextHotfixConfig
 
 
