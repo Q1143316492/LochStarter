@@ -1,0 +1,33 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+#pragma once
+
+#include "GameFeatureAction.h"
+
+#include "ApplyFrontendPerfSettingsAction.generated.h"
+
+class UObject;
+struct FGameFeatureActivatingContext;
+struct FGameFeatureDeactivatingContext;
+
+//////////////////////////////////////////////////////////////////////
+// UApplyFrontendPerfSettingsAction
+
+/**
+ * GameFeatureAction responsible for telling the user settings to apply frontend/menu specific performance settings
+ * GameFeatureAction 负责告知用户应用前端 / 菜单特定性能设置的相关设置
+ */
+UCLASS(MinimalAPI, meta = (DisplayName = "Use Frontend Perf Settings"))
+class UApplyFrontendPerfSettingsAction final : public UGameFeatureAction
+{
+	GENERATED_BODY()
+
+public:
+	//~UGameFeatureAction interface
+	virtual void OnGameFeatureActivating(FGameFeatureActivatingContext& Context) override;
+	virtual void OnGameFeatureDeactivating(FGameFeatureDeactivatingContext& Context) override;
+	//~End of UGameFeatureAction interface
+
+private:
+	static int32 ApplicationCounter;
+};
