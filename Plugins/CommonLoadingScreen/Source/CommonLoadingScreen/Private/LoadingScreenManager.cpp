@@ -409,7 +409,9 @@ bool ULoadingScreenManager::ShouldShowLoadingScreen()
 	const UCommonLoadingScreenSettings* Settings = GetDefault<UCommonLoadingScreenSettings>();
 
 	// Check debugging commands that force the state one way or another
+	// 检查能够强制状态的调试命令
 #if !UE_BUILD_SHIPPING
+	// 命令行直接禁止加载界面
 	static bool bCmdLineNoLoadingScreen = FParse::Param(FCommandLine::Get(), TEXT("NoLoadingScreen"));
 	if (bCmdLineNoLoadingScreen)
 	{
@@ -419,6 +421,7 @@ bool ULoadingScreenManager::ShouldShowLoadingScreen()
 #endif
 
 	// Can't show a loading screen if there's no game viewport
+	// 如果没有游戏视口，就无法显示加载屏幕
 	UGameInstance* LocalGameInstance = GetGameInstance();
 	if (LocalGameInstance->GetGameViewportClient() == nullptr)
 	{
@@ -429,6 +432,7 @@ bool ULoadingScreenManager::ShouldShowLoadingScreen()
 	const bool bNeedToShowLoadingScreen = CheckForAnyNeedToShowLoadingScreen();
 
 	// Keep the loading screen up a bit longer if desired
+	// 如果需要，保持加载屏幕显示更长时间
 	bool bWantToForceShowLoadingScreen = false;
 	if (bNeedToShowLoadingScreen)
 	{
@@ -438,6 +442,7 @@ bool ULoadingScreenManager::ShouldShowLoadingScreen()
 	else
 	{
 		// Don't *need* to show the screen anymore, but might still want to for a bit
+		// 不需要再显示屏幕了，但可能还想显示一会儿
 		const double CurrentTime = FPlatformTime::Seconds();
 		const bool bCanHoldLoadingScreen = (!GIsEditor || Settings->HoldLoadingScreenAdditionalSecsEvenInEditor);
 		const double HoldLoadingScreenAdditionalSecs = bCanHoldLoadingScreen ? LoadingScreenCVars::HoldLoadingScreenAdditionalSecs : 0.0;
@@ -474,23 +479,22 @@ void ULoadingScreenManager::ShowLoadingScreen()
 {
 	if (bCurrentlyShowingLoadingScreen)
 	{
+		// 避免重复显示加载界面
 		return;
 	}
 
 	// Unable to show loading screen if the engine is still loading with its loading screen.
+	// 如果引擎仍在使用其加载界面加载时，无法显示加载界面。
 	if (FPreLoadScreenManager::Get() && FPreLoadScreenManager::Get()->HasActivePreLoadScreenType(EPreLoadScreenTypes::EngineLoadingScreen))
 	{
 		return;
 	}
 
 	TimeLoadingScreenShown = FPlatformTime::Seconds();
-
 	bCurrentlyShowingLoadingScreen = true;
-
 	CSV_EVENT(LoadingScreen, TEXT("Show"));
 
 	const UCommonLoadingScreenSettings* Settings = GetDefault<UCommonLoadingScreenSettings>();
-
 	if (IsShowingInitialLoadingScreen())
 	{
 		UE_LOG(LogLoadingScreen, Log, TEXT("Showing loading screen when 'IsShowingInitialLoadingScreen()' is true."));
@@ -504,31 +508,36 @@ void ULoadingScreenManager::ShowLoadingScreen()
 		UGameInstance* LocalGameInstance = GetGameInstance();
 
 		// Eat input while the loading screen is displayed
+		// 在显示加载屏幕时吃掉输入
 		StartBlockingInput();
 
 		LoadingScreenVisibilityChanged.Broadcast(/*bIsVisible=*/ true);
 
-		// Create the loading screen widget
+		// Create the loading screen widget 创建加载界面控件
 		TSubclassOf<UUserWidget> LoadingScreenWidgetClass = Settings->LoadingScreenWidget.TryLoadClass<UUserWidget>();
 		if (UUserWidget* UserWidget = UUserWidget::CreateWidgetInstance(*LocalGameInstance, LoadingScreenWidgetClass, NAME_None))
 		{
-			LoadingScreenWidget = UserWidget->TakeWidget();
+			LoadingScreenWidget = UserWidget->TakeWidget(); // 这个是拿到slate对象
 		}
 		else
 		{
+			// 配置有问题
 			UE_LOG(LogLoadingScreen, Error, TEXT("Failed to load the loading screen widget %s, falling back to placeholder."), *Settings->LoadingScreenWidget.ToString());
 			LoadingScreenWidget = SNew(SThrobber);
 		}
 
 		// Add to the viewport at a high ZOrder to make sure it is on top of most things
+		// 在视口中添加一个高ZOrder以确保它位于大多数事物之上
 		UGameViewportClient* GameViewportClient = LocalGameInstance->GetGameViewportClient();
 		GameViewportClient->AddViewportWidgetContent(LoadingScreenWidget.ToSharedRef(), Settings->LoadingScreenZOrder);
 
+		// 处理由于加载屏幕显示而需要的性能设置更改
 		ChangePerformanceSettings(/*bEnableLoadingScreen=*/ true);
 
 		if (!GIsEditor || Settings->ForceTickLoadingScreenEvenInEditor)
 		{
 			// Tick Slate to make sure the loading screen is displayed immediately
+			// tick Slate以确保立即显示加载屏幕
 			FSlateApplication::Get().Tick();
 		}
 	}
