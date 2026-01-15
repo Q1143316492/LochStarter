@@ -30,3 +30,4 @@
 # Track Plugins source, but ignore build artifacts
 Plugins/**/Binaries/
 Plugins/**/Intermediate/
+Plugins/**/Content/

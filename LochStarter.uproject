@@ -124,6 +124,10 @@
 		{
 			"Name": "LochGameCore",
 			"Enabled": true
+		},
+		{
+			"Name": "LochGameMaps",
+			"Enabled": true
 		}
 	]
 }
